@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/stylesheets/plugins/dataTables/datatables.min.css" rel="stylesheet">
+    <link href="/stylesheets/animate.css" rel="stylesheet">
+    <link href="/stylesheets/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="/stylesheets/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    <link href="/stylesheets/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    
+  </head>
+  <body>
+      <div id="wrapper">
+        {% include "partials/sidebar.html" %}
+        <div id="page-wrapper" class="gray-bg">
+            {% include "partials/header.html" %}
+            {% block content %}
+            {% endblock %}
+            {% include "partials/footer.html" %}
+        </div>
+      </div>
+      <script src="/javascripts/jquery-3.1.1.min.js"></script>
+      <script src="/javascripts/plugins/metisMenu/jquery.metisMenu.js"></script>
+      <script src="/javascripts/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+      <!-- jquery UI -->
+      <script src="/javascripts/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+    <!-- Touch Punch - Touch Event Support for jQuery UI -->
+      <script src="/javascripts/plugins/touchpunch/jquery.ui.touch-punch.min.js"></script>
+      <script src="/javascripts/bootstrap.min.js"></script>
+    <!-- Custom and plugin javascript -->
+      <script src="/javascripts/inspinia.js"></script>
+      <script src="/javascripts/plugins/pace/pace.min.js"></script>
+
+      <script src="/javascripts/plugins/summernote/summernote.min.js"></script>
+      <script src="/javascripts/plugins/dataTables/datatables.min.js"></script>
+  
+      <script src="/javascripts/main.js"></script>
+  </body>
+</html>

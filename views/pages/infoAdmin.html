@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="middle-box text-center loginscreen   animated fadeInDown">
+    <div>
+            {% if msg2!="" %}
+            <div class="alert alert-success">
+                <span>{{ msg2 }}</span>
+            </div>
+            {% endif %}
+            {% if msg2_2!="" %}
+            <div class="alert alert-danger">
+                <span>{{ msg2_2 }}</span>
+            </div>
+            {% endif %}
+        <div>
+            <h1 class="logo-name">IN+</h1>
+        </div>
+        <form class="m-t" role="form" action="/admin/update/{{user._id}}" method="post">
+            <input type="hidden" name="_method" value="PUT">
+            <div class="form-group">
+                <input type="email" class="form-control" name="email" placeholder="Email" required="" value="{{user.email}}" disabled>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="password" placeholder="Password" required="">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="ComfirmPassword" required="">
+            </div>
+            <button type="submit" class="btn btn-warning block full-width m-b">Modifier</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% if msg10!="" %}
+        <ul class="alert alert-success">
+            <li>{{ msg10 }}</li>
+        </ul>
+    {% endif %}
+    {% if msg10_10!="" %}
+        <ul class="alert alert-warning">
+            <li>{{ msg10_10 }}</li>
+        </ul>
+    {% endif %}
+    {% if msg11!="" %}
+        <ul class="alert alert-danger">
+            <li>{{ msg11 }}</li>
+        </ul>
+    {% endif %}
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>liste des villes</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+
+                <table class="table table-striped table-bordered table-hover dataTables-example text-center">
+                    <thead>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Nom</th>
+                        <th class="text-center">Prénom</th>
+                        <th class="text-center">telephone</th>
+                        <th class="text-center">adresse</th>
+                        <th class="text-center">email</th>
+                        <th class="text-center">Action</th>
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for users in users %}
+                    <tr>
+                        <td>{{loop.index}}</td>
+    
+                        <td>{{users.nom}}</td>
+                        <td>{{users.prenom}}</td>
+                        <td>{{users.tel}}</td>
+                        <td>{{users.adresse}}</td>
+                        <td>{{users.email}}</td>
+                        <td>
+                                <a href="/admin/update/admin/{{users._id}}" class="btn btn-default btn-sm " role="button">Etider</a>
+                                <a href="#" type="submit"  class="btn btn-default btn-sm delete-adminS" data-toggle="modal" data-id="{{users._id}}" data-target="#myModal4" role="button">supprimer</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+      
+    </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal4" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="test">
+
+            </div>
+            <div class="modal-footer">
+                <form method="post" role="form">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Non</button>
+                <button type="submit" class="btn btn-danger" >Oui</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

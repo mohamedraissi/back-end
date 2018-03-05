@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="middle-box text-center loginscreen   animated fadeInDown">
+    <div>
+        <h3>Registre </h3>
+        <p>Créez un compte pour le voir en action.</p>
+        <form class="m-t" role="form" method="post" action="/admin/addadmin">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nom" required="" name="nom">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Prénom" required="" name="prenom">
+            </div>
+            <div class="form-group">
+                <input type="tel" class="form-control" placeholder="telephone" pattern="[0-9]{8}" size="8" minlength="8" required="" name="tel">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="adresse"  size="8" minlength="8" required="" name="addresse">
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-control" placeholder="Email" required="" name="email">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" required="" name="password">
+            </div>
+            <button type="submit" class="btn btn-primary block full-width m-b">Registre</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

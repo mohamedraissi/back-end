@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row" style="margin-top: 20px">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>formulaire : <small></small></h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form method="post" class="form-horizontal" action=/admin/addmarker  enctype="multipart/form-data">
+                    <div class="form-group"><label class="col-sm-2 control-label">Titre</label>
+
+                        <div class="col-sm-10"><input type="text" placeholder="titre" class="form-control" name="titre" required></div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group"><label class="col-sm-2 control-label">categorie</label>
+                       <div class="col-sm-10">
+                            <select name="cat_id" id="" class="form-control">
+                                    {% for categories in categorie %}
+                                        <option value="{{categories._id}}">{{categories.nom}}</option>
+                                    {% endfor %}
+                            </select>
+                       </div> 
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                            <label class="col-sm-2 control-label" name="description" >Image: </label>
+                        <div class="fileinput fileinput-new col-sm-10" data-provides="fileinput">
+                            <span class="btn btn-default btn-file"><span class="fileinput-new">sélectionner une image</span>
+                            <span class="fileinput-exists">Change</span><input type="file" name="image" accept=".jpg, .jpeg, .png" required/></span>
+                            <span class="fileinput-filename"></span>
+                            <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                        </div>  
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title ">
+                                    <h5 class="col-sm-2">description extra</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="form-group " ><label class="col-sm-2 control-label">desc_extra</label>
+                                        <textarea name="desc_extra" class="form-control summernote" rows="5">ecrivez ici....</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 col-md-1 control-label" name="ville" >Ville</label>
+                            <div class="col-sm-10 col-md-2">
+                                <select name="ville_id" id="" class="form-control">
+                                        {% for villes in ville %}
+                                            <option value="{{villes._id}}">{{villes.nom}}</option>
+                                        {% endfor %}
+                                </select>
+                            </div>
+                            <label class="col-sm-2 col-md-1 control-label" name="zoom" >Zoom</label>
+                            <div class="col-sm-10 col-md-2"><input type="number" placeholder="Zoom" class="form-control" name="zoom" required></div>
+                            <label class="col-sm-2 col-md-1 control-label" name="lat" >Latitude</label>
+                            <div class="col-sm-10 col-md-2"><input type="number" step="any" placeholder="Latitude" class="form-control" name="lat" required></div>
+                            <label class="col-sm-2 col-md-1 control-label" name="long" >Longitude</label>
+                            <div class="col-sm-10 col-md-2"><input type="number" step="any" placeholder="Longitude" class="form-control" name="long" required></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <input type="submit" class=" btn btn-primary" value="valider">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
