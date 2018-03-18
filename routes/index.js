@@ -531,6 +531,8 @@ router.get('/composeMail',userAdminIsLoggedIn,(req,res)=>{
   res.render('pages/composeMail.html',{title:'composer un email'});
 });
 router.post('/sendMail',(req,res) => {
+  var maillist=req.body.email.split(" ");
+  console.log(maillist);
   let   transporter = nodemailer.createTransport({
     service: 'gmail',
     port: 25,
@@ -542,7 +544,7 @@ router.post('/sendMail',(req,res) => {
 });
 let mailOptions = {
     from: 'testmed03@gmail.com', 
-    to: req.body.email, 
+    to: maillist, 
     subject: req.body.suijet, 
     html: req.body.message
 };
