@@ -5,10 +5,13 @@ var upload = multer({ dest: 'public/upload/' });
 var router = express.Router(); 
 var User = require('../models/user');
 var Ville = require('../models/ville');
+var Token = require('../models/token');
 var Categorie = require('../models/categorie');
 var Marker = require('../models/marker');
 var path = require('path');
 const mongoose = require('mongoose');
+var crypto = require('crypto');
+var nodemailer=require('nodemailer');
 var fs = require('fs');
 
 //
@@ -32,7 +35,7 @@ router.get('/logout',userAdminIsLoggedIn,(req,res) => {
   req.logout();
   res.redirect('/login');
 });
-router.get('/getmarker',(req,res) => {
+router.get('/getmarker',userAdminIsLoggedIn,(req,res) => {
   Marker.find({}).exec( (err, marker) => {
     if (err) {
       console.log(err);
@@ -42,7 +45,7 @@ router.get('/getmarker',(req,res) => {
     }
 });
 });
-router.get('/addmarker',(req,res) => {
+router.get('/addmarker',userAdminIsLoggedIn,(req,res) => {
   Ville.find({},(err,ville) => {
     if(err){
       console.log(err);
@@ -61,7 +64,7 @@ router.get('/addmarker',(req,res) => {
   });
   
 });
-router.get('/update/marker/:id',(req,res) => {
+router.get('/update/marker/:id',userAdminIsLoggedIn,(req,res) => {
   Marker.findOne({_id:mongoose.Types.ObjectId(req.params.id)},(err,marker) => {
     if(err){
       console.log(err);
@@ -88,7 +91,7 @@ router.get('/update/marker/:id',(req,res) => {
     
 });
 });
-router.post('/addmarker',(req, res ) => {
+router.post('/addmarker',userAdminIsLoggedIn,(req, res ) => {
   upload(req, res,(err) => {
     if (err) {
       console.log(err);    }
@@ -119,7 +122,7 @@ router.post('/addmarker',(req, res ) => {
           }
         } else {
           console.log('marker saved successfully');
-          req.flash('msg6',' c bon');
+          req.flash('msg6',' le marqueur à été bien enregistré');
           res.redirect("/admin/getmarker");
         }
       });
@@ -127,7 +130,7 @@ router.post('/addmarker',(req, res ) => {
   });
 
 });
-router.post('/update/marker/:id',(req,res) => {
+router.post('/update/marker/:id',userAdminIsLoggedIn,(req,res) => {
   upload(req, res,(err) => {
     if (err) {
       console.log(err);    }
@@ -146,7 +149,7 @@ router.post('/update/marker/:id',(req,res) => {
         }
         else{
           fs.unlinkSync("public/upload/"+marker.image);
-          req.flash("msg8","modifier");
+          req.flash("msg8","le marqueur à été bien modifieé");
           res.redirect("/admin//update/marker/"+req.params.id);
         }
       });
@@ -154,7 +157,7 @@ router.post('/update/marker/:id',(req,res) => {
   });
   
 });
-router.delete('/delete/marker/:id',(req,res) => {
+router.delete('/delete/marker/:id',userAdminIsLoggedIn,(req,res) => {
   Marker.findOneAndRemove({_id:req.params.id}, (err, marker) => {
     if (err) {
       console.log(err);
@@ -164,15 +167,15 @@ router.delete('/delete/marker/:id',(req,res) => {
         message: "marker successfully deleted",
     };
     fs.unlinkSync("public/upload/"+marker.image);
-    req.flash("msg7","supprimer");
+    req.flash("msg7","le marqueur à été bien supprimeé");
     res.redirect("/admin/getmarker");
   }
 });
 });
-router.get('/addville',(req,res) => {
+router.get('/addville',userAdminIsLoggedIn,(req,res) => {
   res.render('pages/addville.html',{title:'addVille'});
 });
-router.get('/getville',(req,res) => {
+router.get('/getville',userAdminIsLoggedIn,(req,res) => {
   Ville.find({}).exec( (err, ville) => {
     if (err) {
       console.log(err);
@@ -188,7 +191,7 @@ router.get('/getville',(req,res) => {
 
   });
 });
-router.post('/addville',(req, res ) => { 
+router.post('/addville',userAdminIsLoggedIn,(req, res ) => { 
   upload(req, res,(err) => {
     if (err) {
       console.log(err);    }
@@ -217,32 +220,38 @@ router.post('/addville',(req, res ) => {
             }
           } else {
             console.log('ville saved successfully');
-            req.flash('msg1',' c bon');
+            req.flash('msg1',' la ville à été bien enregistré');
             res.redirect('/admin/getville');
           }
         });
       }
   });
 });
-router.get("/update/ville/:id",(req,res) => {
+router.get("/update/ville/:id",userAdminIsLoggedIn,(req,res) => {
   Ville.findOne({_id: mongoose.Types.ObjectId(req.params.id)},(err,ville) => {
     if(err){
       console.log(err);
     }
     else{
       console.log(ville);
-      res.render('pages/editville.html',{title:'editcat',ville:ville,msg9:req.flash('msg9')});
+      res.render('pages/editville.html',{title:'edit ville',ville:ville,msg9:req.flash('msg9')});
     }
   });
  });
-router.post('/update/ville/:id',(req,res) =>{
+router.post('/update/ville/:id',userAdminIsLoggedIn,(req,res) =>{
   upload(req, res,(err) => {
     if (err) {
       console.log(err);    }
     else {
+      if(req.file){
+        var image=req.file.filename;
+      }
+      else{
+        var image=req.body.img;
+      }
       Ville.findOneAndUpdate({_id:req.params.id}, { $set: {  
         nom:req.body.nom,
-        image:req.file.filename,
+        image:image,
         description:req.body.description,
         desc_extra:req.body.desc_extra,
         gouvernorat:req.body.gouvernorat,
@@ -255,17 +264,17 @@ router.post('/update/ville/:id',(req,res) =>{
         }
         else{
           console.log(ville);
-          if(req.file.filename){
+          if(req.file){
             fs.unlinkSync("public/upload/"+ville.image);
           }
-          req.flash('msg9','modifier');
+          req.flash('msg9','la ville à été bien modifieé');
           res.redirect("/admin/update/ville/"+req.params.id);
         }
       });
     }
   });
 });
-router.delete('/delete/ville/:id',(req,res) => {
+router.delete('/delete/ville/:id',userAdminIsLoggedIn,(req,res) => {
   Ville.findOneAndRemove({_id:req.params.id}, (err, ville) => {
     if (err) {
       console.log(err);
@@ -275,12 +284,12 @@ router.delete('/delete/ville/:id',(req,res) => {
         message: "ville successfully deleted",
     };
     fs.unlinkSync("public/upload/"+ville.image);
-    req.flash('msg3','supprimer');
+    req.flash('msg3','la ville à été bien supprimeé');
     res.redirect('/admin/getville');
   }
 });
 });
-router.get('/update/:id',(req,res) => {
+router.get('/update/:id',userAdminIsLoggedIn,(req,res) => {
   User.findOne({_id:mongoose.Types.ObjectId(req.params.id)}).exec((err,user) => {
     if (err) {
       console.log(err);
@@ -291,7 +300,7 @@ router.get('/update/:id',(req,res) => {
     }
   });
 });
-router.put('/update/:id',(req,res) => {
+router.put('/update/:id',userAdminIsLoggedIn,(req,res) => {
   bcryptjs.genSalt(12,(err, salt) => {
     bcryptjs.hash(req.body.password, salt,(err, hash) => {
         if (err) {
@@ -318,7 +327,7 @@ router.put('/update/:id',(req,res) => {
 });
 
 });
-router.get('/getcat',(req,res) => {
+router.get('/getcat',userAdminIsLoggedIn,(req,res) => {
   Categorie.find({},(err,categorie) => {
     if(err){
       console.log(err);
@@ -328,7 +337,7 @@ router.get('/getcat',(req,res) => {
     }
   });
 });
-router.get('/addcat',(req,res) => {
+router.get('/addcat',userAdminIsLoggedIn,(req,res) => {
   
   res.render('pages/addcat.html',{title:'addcat'});
 });
@@ -344,7 +353,7 @@ router.get('/update/categorie/:id',(req,res) => {
 
   });
 });
-router.post('/addcat',(req, res ) => {
+router.post('/addcat',userAdminIsLoggedIn,(req, res ) => {
   var categorie = new Categorie(
     {
       nom:req.body.nom,
@@ -361,13 +370,13 @@ router.post('/addcat',(req, res ) => {
       }
     } else {
       console.log('categorie saved successfully');
-      req.flash('msg4','enregistrer');
+      req.flash('msg4','le catégorie à été bien enregistré');
       res.redirect('/admin/getcat');
     }
   });
 
 });
-router.delete('/delete/categorie/:id',(req,res) => {
+router.delete('/delete/categorie/:id',userAdminIsLoggedIn,(req,res) => {
   Categorie.remove({_id:req.params.id}, (err, categorie) => {
     if (err) {
       console.log(err);
@@ -376,12 +385,12 @@ router.delete('/delete/categorie/:id',(req,res) => {
      response = {
         message: "ville successfully deleted",
     };
-    req.flash('msg5','supprimer');
+    req.flash('msg5','le catégorie à été bien supprimeé');
     res.redirect('/admin/getcat');
   }
 });
 });
-router.put('/update/categorie/:id',(req,res) =>{
+router.put('/update/categorie/:id',userAdminIsLoggedIn,(req,res) =>{
   Categorie.findOneAndUpdate({_id:req.params.id}, { $set: {  
     nom:req.body.nom,
     }},
@@ -391,15 +400,15 @@ router.put('/update/categorie/:id',(req,res) =>{
     }
     else{
       console.log(categorie);
-      req.flash('msg6','modifier');
+      req.flash('msg6','catégorie à été bien modifieé');
       res.redirect('/admin/update/categorie/'+categorie._id);
     }
   });
 });
-router.get('/addadmin',(req,res) => {
+router.get('/addadmin',userAdminIsLoggedIn,(req,res) => {
   res.render('pages/addadmin.html',{title:'ajouter un admin'});
 });
-router.get('/getadmin',(req,res) => {
+router.get('/getadmin',userAdminIsLoggedIn,(req,res) => {
   User.find({role:"adminS"},(err,user) => {
     if(err){
       console.log(err);
@@ -410,7 +419,7 @@ router.get('/getadmin',(req,res) => {
   });
   
 });
-router.post('/addadmin',(req,res) => {
+router.post('/addadmin',userAdminIsLoggedIn,(req,res) => {
   var user = new User(
     {
       prenom:req.body.nom,
@@ -446,8 +455,46 @@ router.post('/addadmin',(req,res) => {
         }
     });
 });
+var token = new Token({ userId: user._id, token: crypto.randomBytes(16).toString('hex') });
+        token.save(function (err) {
+            if (err) { return res.status(500).send({ msg: err.message }); }
+            let   transporter = nodemailer.createTransport({
+              service: 'gmail',
+              port: 25,
+              secure: false,
+              auth: {
+                user:'testmed03@gmail.com',
+                pass:20181273
+              }
+          });
+          let mailOptions = {
+              from: 'testmed03@gmail.com', 
+              to: user.email, 
+              subject: 'Account Verification Token', 
+              html: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/admin/confirmation\/' +user._id+'/'+ token.token + '.\n'
+          };
+          
+          transporter.sendMail(mailOptions, (err, res) => {
+              if (err) {
+                  return console.log(err);
+              }
+              else{
+                 console.log('Message sent: %s', res);
+              }
+          });
+        });
 });
-router.delete('/delete/adminS/:id',(req,res) => {
+router.get('/confirmation/:id/:token',(req,res) => {
+  User.findOneAndUpdate({_id:req.params.id},{ $set: {isVerified:true}},(err,user) => {
+    if(err){
+      console.log(err);  
+    }
+    else{
+      res.redirect("/");
+    }
+  });
+});
+router.delete('/delete/adminS/:id',userAdminIsLoggedIn,(req,res) => {
   User.findOneAndRemove({_id:req.params.id}, (err, user) => {
     if (err) {
       console.log(err);
@@ -458,11 +505,76 @@ router.delete('/delete/adminS/:id',(req,res) => {
   }
 });
 });
+router.get('/map' ,userAdminIsLoggedIn,(req,res) => {
+  Categorie.find({},(err,categorie) => {
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.render('pages/map.html',{title:"Map",categorie:categorie});
+    }
+  })
+  
+
+});
+router.get('/cat/:id',userAdminIsLoggedIn,(req,res) => {
+  Marker.find({cat_id:req.params.id},(err,marker) => {
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.json(marker);
+    }
+  })
+});
+router.get('/composeMail',userAdminIsLoggedIn,(req,res)=>{
+  res.render('pages/composeMail.html',{title:'composer un email'});
+});
+router.post('/sendMail',(req,res) => {
+  let   transporter = nodemailer.createTransport({
+    service: 'gmail',
+    port: 25,
+    secure: false,
+    auth: {
+      user:'testmed03@gmail.com',
+      pass:20181273
+    }
+});
+let mailOptions = {
+    from: 'testmed03@gmail.com', 
+    to: req.body.email, 
+    subject: req.body.suijet, 
+    html: req.body.message
+};
+
+transporter.sendMail(mailOptions, (err, res) => {
+    if (err) {
+        return console.log(err);
+    }
+    else{
+       console.log('Message sent: %s', res);
+    }
+});
+  res.redirect("/admin/composeMail");
+});
+router.get('/inbox',userAdminIsLoggedIn,(req,res) => {
+  res.render("pages/inbox.html");
+});
+router.get('/users',(req,res) => {
+  User.find({role:'client'},(err,users) =>  {
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.render('pages/getusers.html',{title:"users",users:users});
+    }
+  });
+  
+});
 function userAdminIsLoggedIn(req, res, next) {
 
   // Si l'utilisateur est authentifié et de role admin, continuez
   if (req.isAuthenticated() && (req.user.role=="adminP" || req.user.role=="adminS")){
-
     return next();
   }
   else {

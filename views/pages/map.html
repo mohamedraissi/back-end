@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row" style="height: calc(100% - 22px);">
+            <div id="map" class="col-lg-9 col-sm-9"></div>
+            <div class="col-lg-3 col-sm-3">
+                    {% for categorie in categorie %}
+                        <div class="row">
+                                <a class="btn btn-primary text-center btn-lg col-lg-12 cat" role="button" data-target="{{categorie._id}}" style="margin-bottom:2vh;height:8vh;padding:5px;" >
+                                        <i class="fa fa-map-marker fa-2x"></i> {{categorie.nom}}
+                                </a>
+                        </div>
+                    {% endfor %}    
+            </div>
+    </div>
+{% endblock %}

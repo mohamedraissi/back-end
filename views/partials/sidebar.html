@@ -6,8 +6,8 @@
                                 <img alt="image" class="img-circle" src="/images/profile_small.jpg" />
                                 </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">David Williams</strong>
-                                </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
+                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{user.nom}}</strong>
+                                </span> <span class="text-muted text-xs block">{{user.role}} <b class="caret"></b></span> </span> </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="/admin/update/{{user._id}}">Profile</a></li>
                                 <li class="divider"></li>
@@ -43,7 +43,27 @@
                             <li class="{% if path=='/admin/getcat' %} active {% endif %}"><a href="/admin/getcat">liste des Catégories</a></li>
                         </ul>
                     </li>
+                    <li class=" {% if (path=='/admin/addcat') or (path=='/admin/getcat') %} active {% endif %}">
+                        <a href="#"><i class="fa fa-building"></i> <span class="nav-label">Agence</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li class="{% if path=='/admin/addcat' %} active {% endif %}"><a href="/admin/addcat">ajouter un Agence</a></li>
+                            <li class="{% if path=='/admin/getcat' %} active {% endif %}"><a href="/admin/getcat">liste des Agence</a></li>
+                        </ul>
+                    </li>
+                    <li class="{% if (path=='/admin/map')%} active {% endif %}">
+                        <a href="/admin/map"><i class="fa fa-map"></i> <span class="nav-label">Map</span></a>
+                    </li>
+                    <li class="{% if (path=='/admin/getusers')%} active {% endif %}">
+                        <a href="/admin/users"><i class="fa fa-users"></i> <span class="nav-label">Users</span></a>
+                    </li>
                     {% if user.role=='adminP'%}
+                    <li class=" {% if (path=='/admin/composeMail') or (path=='/admin/inbox') %} active {% endif %}">
+                        <a href="#"><i class="fa fa-envelope"></i> <span class="nav-label">Mailbox</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li class="{% if path=='/admin/composeMail' %} active {% endif %}"><a href="/admin/composeMail">Composer un mail</a></li>
+                            <li class="{% if path=='/admin/inbox' %} active {% endif %}"><a href="/admin/inbox">Inbox</a></li>
+                        </ul>
+                    </li>
                     <li class=" {% if (path=='/admin/addadmin') or (path=='/admin/getadmin') %} active {% endif %}">
                         <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Admin</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">

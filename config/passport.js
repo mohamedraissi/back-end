@@ -15,6 +15,9 @@ module.exports=function(passport){
         console.log("no");
         return done(null, false, { message: 'mauvais email.' });
       }
+      if (user.isVerified==false) {
+        return done(null, false, { message: 'comfirmer votre compte.' });
+      }
       //verifier le mot de passe d'un utlisateur
       bcryptjs.compare(password,user.password,
         function(err,isMatch){

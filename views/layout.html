@@ -2,6 +2,8 @@
 <html>
   <head>
     <title>{{title}}</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
     <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="/stylesheets/plugins/dataTables/datatables.min.css" rel="stylesheet">
@@ -10,7 +12,13 @@
     <link href="/stylesheets/plugins/summernote/summernote-bs3.css" rel="stylesheet">
     <link href="/stylesheets/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
     <link href="/stylesheets/style.css" rel="stylesheet">
-    
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+       height:600px;
+      }
+    </style>
   </head>
   <body>
       <div id="wrapper">
@@ -39,5 +47,46 @@
       <script src="/javascripts/plugins/dataTables/datatables.min.js"></script>
   
       <script src="/javascripts/main.js"></script>
+      <script>
+          $(document).ready(function(){
+            $(".cat").click((e) => {
+            $target=$(e.target);
+            const id=$target.attr('data-target');
+            console.log(id);
+            $.ajax({url: "/admin/cat/"+id, success: function(myLatLng){
+              console.log(myLatLng.lat);
+              function initMap() {
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 7,
+            center: {lat: 34.8064948, lng: 10.181531599999971}
+          });
+          for (var i = 0; i < myLatLng.length; i++){
+            console.log(myLatLng[i].lat)
+            resultat={ lat:myLatLng[i].lat,lng:myLatLng[i].long}
+          var marker = new google.maps.Marker({
+            position: resultat,
+            map: map,
+            title: myLatLng[i].titre
+          });
+          console.log(myLatLng.length);
+        }
+      }
+      initMap();
+        }});
+            });
+            function initMap() {
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 7,
+            center: {lat: 34.8064948, lng: 10.181531599999971}
+          });
+      }
+      initMap();
+        
+    });
+ 
+      </script>
+      <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnQ38nHXTrxoyAFUeRmTeoQbRelsYm20&callback=initMap">
+      </script>
   </body>
 </html>

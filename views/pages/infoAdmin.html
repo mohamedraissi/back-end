@@ -12,11 +12,21 @@
                 <span>{{ msg2_2 }}</span>
             </div>
             {% endif %}
-        <div>
-            <h1 class="logo-name">IN+</h1>
-        </div>
+
         <form class="m-t" role="form" action="/admin/update/{{user._id}}" method="post">
             <input type="hidden" name="_method" value="PUT">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nom" required="" name="nom" value="{{user.nom}}">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Prénom" required="" name="prenom" value="{{user.prenom}}">
+            </div>
+            <div class="form-group">
+                <input type="tel" class="form-control" placeholder="telephone" pattern="[0-9]{8}" size="8" minlength="8" required="" name="tel" value="{{user.tel}}">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="adresse"  size="8" minlength="8" required="" name="addresse" value="{{user.adresse}}">
+            </div>
             <div class="form-group">
                 <input type="email" class="form-control" name="email" placeholder="Email" required="" value="{{user.email}}" disabled>
             </div>
