@@ -562,7 +562,7 @@ transporter.sendMail(mailOptions, (err, res) => {
 router.get('/inbox',userAdminIsLoggedIn,(req,res) => {
   res.render("pages/inbox.html");
 });
-router.get('/users',(req,res) => {
+router.get('/users',userAdminIsLoggedIn,(req,res) => {
   User.find({role:'client'},(err,users) =>  {
     if(err){
       console.log(err);
@@ -572,6 +572,12 @@ router.get('/users',(req,res) => {
     }
   });
   
+});
+router.get('/addagence',userAdminIsLoggedIn,(req,res) => {
+  res.render("pages/addagence.html");
+});
+router.get('/getagence',userAdminIsLoggedIn,(req,res) => {
+  res.render("pages/getagence.html");
 });
 function userAdminIsLoggedIn(req, res, next) {
 
