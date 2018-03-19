@@ -40,7 +40,6 @@ router.get('/getmarker',userAdminIsLoggedIn,(req,res) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(marker);
       res.render("pages/getmarker.html",{title:"getMarker",marker:marker,msg6:req.flash('msg6'),msg7:req.flash('msg7')})
     }
 });
@@ -56,7 +55,6 @@ router.get('/addmarker',userAdminIsLoggedIn,(req,res) => {
           console.log(err);
         }
         else{
-          console.log(ville)
           res.render('pages/addmarker.html',{title:'addMarker',categorie:categorie,ville:ville});
         }
       });
@@ -80,8 +78,6 @@ router.get('/update/marker/:id',userAdminIsLoggedIn,(req,res) => {
               console.log(err);
             }
             else{
-                  console.log(categorie);
-                  console.log(marker.cat_id[0]);
                   res.render('pages/editmarker.html',{title:'updade Marqueur',categorie:categorie,ville:ville,marker:marker,msg8:req.flash('msg8')});
             }
           });
@@ -121,7 +117,6 @@ router.post('/addmarker',userAdminIsLoggedIn,(req, res ) => {
             res.send(err);
           }
         } else {
-          console.log('marker saved successfully');
           req.flash('msg6',' le marqueur à été bien enregistré');
           res.redirect("/admin/getmarker");
         }
@@ -184,7 +179,6 @@ router.get('/getville',userAdminIsLoggedIn,(req,res) => {
       Ville.count({},(err,count) => {
         let page=Math.round(count/6);
         res.render('pages/getville.html',{villes:ville,title:'getVille',page:page,msg:req.flash("msg1"),msg3:req.flash('msg3')});
-        console.log(req.flash("msg1"));
       });
       
     }
@@ -219,7 +213,6 @@ router.post('/addville',userAdminIsLoggedIn,(req, res ) => {
               res.send(err);
             }
           } else {
-            console.log('ville saved successfully');
             req.flash('msg1',' la ville à été bien enregistré');
             res.redirect('/admin/getville');
           }
@@ -233,7 +226,6 @@ router.get("/update/ville/:id",userAdminIsLoggedIn,(req,res) => {
       console.log(err);
     }
     else{
-      console.log(ville);
       res.render('pages/editville.html',{title:'edit ville',ville:ville,msg9:req.flash('msg9')});
     }
   });
@@ -263,7 +255,6 @@ router.post('/update/ville/:id',userAdminIsLoggedIn,(req,res) =>{
           console.log(err);
         }
         else{
-          console.log(ville);
           if(req.file){
             fs.unlinkSync("public/upload/"+ville.image);
           }
@@ -295,7 +286,6 @@ router.get('/update/:id',userAdminIsLoggedIn,(req,res) => {
       console.log(err);
     }
     else {
-      console.log(user)
       res.render('pages/infoAdmin.html',{title:'update',user:user,msg2:req.flash('msg2'),msg2_2:req.flash('msg2_2')});
     }
   });
@@ -347,7 +337,6 @@ router.get('/update/categorie/:id',(req,res) => {
       console.log(err);
     }
     else{
-      console.log(categorie);
       res.render('pages/editcat.html',{title:'editcat',msg6:req.flash('msg6'),cat:categorie});
     }
 
@@ -369,7 +358,6 @@ router.post('/addcat',userAdminIsLoggedIn,(req, res ) => {
         res.send(err);
       }
     } else {
-      console.log('categorie saved successfully');
       req.flash('msg4','le catégorie à été bien enregistré');
       res.redirect('/admin/getcat');
     }
@@ -399,7 +387,6 @@ router.put('/update/categorie/:id',userAdminIsLoggedIn,(req,res) =>{
       console.log(err);
     }
     else{
-      console.log(categorie);
       req.flash('msg6','catégorie à été bien modifieé');
       res.redirect('/admin/update/categorie/'+categorie._id);
     }
@@ -532,7 +519,6 @@ router.get('/composeMail',userAdminIsLoggedIn,(req,res)=>{
 });
 router.post('/sendMail',(req,res) => {
   var maillist=req.body.email.split(" ");
-  console.log(maillist);
   let   transporter = nodemailer.createTransport({
     service: 'gmail',
     port: 25,

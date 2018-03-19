@@ -21,7 +21,7 @@ var app = express();
 dotenv.config({ path: ".env" });
 app.set("port", process.env.PORT );
 app.set('views', path.join(__dirname, 'views'));
-mongoose.connect(process.env.DB_HOST || "mongodb://localhost:27017/projet", function(err,database){
+mongoose.connect(process.env.DB_HOST || "mongodb://localhost:27017/voyage", function(err,database){
   if (err) {
     console.log(err);
   }
@@ -60,7 +60,6 @@ app.get('/admin/*',function(req, res, next) {
  
   res.locals.user = req.user || null;
   res.locals.path = req.path ;
-  console.log(res.locals);
   next();
 });
 nunjucks.configure("views",{
