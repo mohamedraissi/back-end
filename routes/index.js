@@ -92,7 +92,7 @@ router.post('/addmarker',userAdminIsLoggedIn,(req, res ) => {
     if (err) {
       console.log(err);    }
     else {
-      
+     
       var marker = new Marker(
         {
           titre:req.body.titre,
@@ -130,8 +130,14 @@ router.post('/update/marker/:id',userAdminIsLoggedIn,(req,res) => {
     if (err) {
       console.log(err);    }
     else {
+      if(req.file){
+        var image=req.file.filename;
+      }
+      else{
+        var image=req.body.img;
+      }
       Marker.findOneAndUpdate({_id:req.params.id}, { $set: {titre:req.body.titre,
-        image:req.file.filename,
+        image:image,
         description:req.body.desc_extra,
         lat:req.body.lat,
         long:req.body.long,
@@ -143,9 +149,11 @@ router.post('/update/marker/:id',userAdminIsLoggedIn,(req,res) => {
           console.log(err);
         }
         else{
-          fs.unlinkSync("public/upload/"+marker.image);
+          if(req.file){
+            fs.unlinkSync("public/upload/"+marker.image);
+          }
           req.flash("msg8","le marqueur à été bien modifieé");
-          res.redirect("/admin//update/marker/"+req.params.id);
+          res.redirect("/admin/update/marker/"+req.params.id);
         }
       });
     }
@@ -576,4 +584,4 @@ function userAdminIsLoggedIn(req, res, next) {
     res.redirect('/login');
   }
 }
-module.exports = router;
+module.exports = router; 
