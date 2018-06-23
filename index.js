@@ -19,7 +19,7 @@ var login = require('./routes/login');
 var users = require('./routes/users');
 var app = express();
 dotenv.config({ path: ".env" });
-app.set("port", process.env.PORT );
+app.set("port", process.env.PORT || 5000);
 app.set('views', path.join(__dirname, 'views'));
 mongoose.connect(process.env.DB_HOST || "mongodb://localhost:27017/voyage", function(err,database){
   if (err) {

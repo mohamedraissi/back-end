@@ -63,4 +63,16 @@ $(document).ready(function(){
         console.log(id)
         $(".modal-footer form").attr("action", "/admin/delete/adminS/"+id);
     });
+    $("#sc").change(function() {
+        console.log($("#sc").val());
+        if($("#sc").val()=='5a9a86bbac8e150da48477b0'){
+    $(".select").after(
+        " <div class='hr-line-dashed hebergement'></div><div class='form-group hebergement'> <label class='col-sm-2 control-label'>type d'hebergement</label><div class='col-sm-10'> hotel:<input type='radio' name='sc' id='adioButton' style='margin:10px;' value='1'>hotel:<input type='radio' name='sc' id='adioButton' style='margin:10px;' value='2'>maison d'hôte:<input type='radio' name='sc' id='adioButton' style='margin:10px;' value='3'></div></div><div class='hr-line-dashed hebergement'></div><div class='form-group  hebergement'><label class='col-sm-2 control-label'>Nombres des etoiles</label><div class='col-sm-10'><select name='nbr_e'  class='form-control'><option name='nbr-0' value='0'>0</option><option name='nbr-1' value='1'>1</option><option name='nbr-2' value='2'>2</option><option name='nbr-3' value='3'>3</option><option name='nbr-4' value='4'>4</option><option name='nbr-5' value='5'>5</option></select></div></div>"
+
+        );
+    }
+    else{
+        $('.hebergement').remove();
+    }
+});
 });

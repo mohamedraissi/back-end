@@ -29,7 +29,6 @@
                         <th class="text-center">#</th>
                         <th class="text-center">Image</th>
                         <th class="text-center">Nom</th>
-                        <th class="text-center">Zoom</th>
                         <th class="text-center">Latitude</th>
                         <th class="text-center">Longitude</th>
                         <th class="text-center">Action</th>
@@ -39,13 +38,12 @@
                     {% for markers in marker %}
                     <tr>
                         <td>{{loop.index}}</td>
-                        <td><img src="/upload/{{markers.image}}" alt="/upload/{{markers.image}}" style="width:25%;"></td>
+                        <td ><img src="/upload/{{markers.image}}" alt="/upload/{{markers.image}}" style="width: 100px;" ></td>
                         <td>{{markers.titre}}</td>
-                        <td>{{markers.zoom}}</td>
                         <td>{{markers.lat}}</td>
                         <td>{{markers.long}}</td>
                         <td>                            
-                                <a href="/admin/update/marker/{{markers._id}}" class="btn btn-default btn-sm " role="button">Etider</a>
+                                <a href="/admin/update/marker/{{markers._id}}" class="btn btn-default btn-sm " role="button">Editer</a>
                                 <a href="#" type="submit"  class="btn btn-default btn-sm delete-marker" data-toggle="modal" data-id="{{markers._id}}" data-target="#myModal4" role="button">supprimer</a>
                         </td>
                     </tr>

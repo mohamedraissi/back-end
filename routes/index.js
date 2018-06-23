@@ -92,7 +92,25 @@ router.post('/addmarker',userAdminIsLoggedIn,(req, res ) => {
     if (err) {
       console.log(err);    }
     else {
-     
+
+     if(req.body.cat_id=='5a9a86bbac8e150da48477b0'){
+      var marker = new Marker(
+        {
+          titre:req.body.titre,
+          image:req.file.filename,
+          description:req.body.desc_extra,
+          lat:req.body.lat,
+          long:req.body.long,
+          zoom:req.body.zoom,
+          cat_id:req.body.cat_id,
+          ville_id:req.body.ville_id,
+          nbre_etoile:req.body.nbr_e,
+          type_hebergement:req.body.sc,
+          
+        }
+      );
+     }
+     else{
       var marker = new Marker(
         {
           titre:req.body.titre,
@@ -104,9 +122,10 @@ router.post('/addmarker',userAdminIsLoggedIn,(req, res ) => {
           cat_id:req.body.cat_id,
           ville_id:req.body.ville_id,
           
-          
         }
       );
+     }
+      
       marker.save((err) => {
         if (err) {
           console.log(err);

@@ -18,6 +18,14 @@ const MarkerSchema = new Schema({
     type:Number,
     require:true,
   },
+  nbre_etoile:{
+    type:Number,
+    require:true,
+  },
+  type_hebergement:{
+    type:String,
+    require:true,
+  },
   lat:{
     type:Number,
     require:true,

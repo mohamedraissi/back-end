@@ -18,9 +18,9 @@
                         <div class="col-sm-10"><input type="text" placeholder="titre" class="form-control" name="titre" required></div>
                     </div>
                     <div class="hr-line-dashed"></div>
-                    <div class="form-group"><label class="col-sm-2 control-label">categorie</label>
+                    <div class="form-group select"><label class="col-sm-2 control-label">categorie</label>
                        <div class="col-sm-10">
-                            <select name="cat_id" id="" class="form-control">
+                            <select name="cat_id" id="sc" class="form-control">
                                     {% for categories in categorie %}
                                         <option value="{{categories._id}}">{{categories.nom}}</option>
                                     {% endfor %}
